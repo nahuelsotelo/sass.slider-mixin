@@ -1,0 +1,161 @@
+// @import 'slideshow';
+$n: 4;
+$d: ($n*6) + s;
+
+$t1: 0%;
+$t2: floor(percentage(1 / ($n*2)));
+$t3: floor(percentage(1 / $n));
+$t4: floor(percentage(1 / ($n/1.5)));
+$t5: 100%;
+
+.foo {
+    content: $d;
+    content: $t1;
+    content: $t2;
+    content: $t3;
+    content: $t4;
+    content: $t5;
+}
+
+/* Animation for the slideshow images */
+@keyframes imageAnimation {
+    #{$t1} {
+        opacity: 0;
+        animation-timing-function: ease-in;
+    }
+    #{$t2} {
+        opacity: 1;
+        transform: scale(1.05);
+        animation-timing-function: ease-out;
+    }
+    #{$t3} {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    #{$t4} {
+        opacity: 0;
+        transform: scale(1.1);
+    }
+    #{$t5} { opacity: 0 }
+}
+
+.cb-slideshow {
+    &,
+    &:after {
+        position: fixed;
+            top: 0px;
+            left: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+    &:after {
+        content: '';
+        background: transparent url(../img/pattern.png) repeat top left;
+    }
+
+    li {
+        span {
+            background-size: cover;
+            background-position: 50% 50%;
+            background-repeat: none;
+            color: transparent;
+            position: absolute;
+                top: 0px;
+                left: 0px;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: 0;
+
+            animation: imageAnimation $d linear infinite 0s;
+            backface-visibility: hidden;
+        }
+        div {
+            opacity: 0;
+            position: absolute;
+                bottom: 30px;
+                left: 0px;
+            width: 100%;
+            text-align: center;
+            z-index: 1000;
+
+            animation: titleAnimation $d linear infinite 0s;
+
+            h3 {
+                color: rgba(169,3,41, 0.8);
+                font-family: 'BebasNeueRegular', 'Arial Narrow', Arial, sans-serif;
+                font-size: 240px;
+                line-height: 200px;
+                padding: 0;
+            }
+        }
+
+        &:nth-child(1) {
+            span {
+                background-image: url(../img/1.jpg)
+            }
+        }
+        &:nth-child(2) {
+            span {
+                background-image: url(../img/2.jpg);
+                animation-delay: 6s;
+            }
+            div { animation-delay: 6s; }
+        }
+        &:nth-child(3) {
+            span {
+                background-image: url(../img/3.jpg);
+                animation-delay: 12s;
+            }
+            div { animation-delay: 12s; }
+        }
+        &:nth-child(4) {
+            span {
+                background-image: url(../img/4.jpg);
+                animation-delay: 18s;
+            }
+            div { animation-delay: 18s; }
+        }
+        // &:nth-child(5) {
+        //     span {
+        //         background-image: url(../img/5.jpg);
+        //         animation-delay: .24s;
+        //     }
+        //     div { animation-delay: 24s; }
+        // }
+        // &:nth-child(6) {
+        //     span {
+        //         background-image: url(../img/6.jpg);
+        //         animation-delay: 30s;
+        //     }
+        //     div { animation-delay: 30s; }
+        // }
+    }
+}
+
+
+
+/* Animation for the title */
+@keyframes titleAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(200px);
+    }
+    8% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    17% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    19% { opacity: 0 }
+    25% {
+        opacity: 0;
+        transform: scale(10);
+    }
+    100% { opacity: 0 }
+}
+
+

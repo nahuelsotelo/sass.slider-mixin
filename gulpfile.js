@@ -105,12 +105,11 @@ gulp.task('images', function() {
 gulp.task('browsersync', function() {
     browsersync({
         server: {
-            baseDir: "demo/",
-            port: 5000,
-            watchTask: true,
-            files: [ path.distStyles + '/*.css'],
-            logConnections: true,
+            baseDir: "./demo/"
         },
+        port: 5000,
+        watchTask: true,
+        files: [ path.distStyles + '/*.css']
     })
 });
 
