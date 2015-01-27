@@ -1,76 +1,102 @@
-// @import 'slideshow';
-$n: 4;
-$d: ($n*6) + s;
+$slider1: (
+    name:   'bg-slider',
+    slides: 6
+);
 
-$t1: 0%;
-$t2: floor(percentage(1 / ($n*2)));
-$t3: floor(percentage(1 / $n));
-$t4: floor(percentage(1 / ($n/1.5)));
-$t5: 100%;
 
-.foo {
-    content: $d;
-    content: $t1;
-    content: $t2;
-    content: $t3;
-    content: $t4;
-    content: $t5;
-}
+@mixin background-slider($slider) {
+    $name: map-get($slider, name);
+    $s:    map-get($slider, slides);
 
-/* Animation for the slideshow images */
-@keyframes imageAnimation {
-    #{$t1} {
-        opacity: 0;
-        animation-timing-function: ease-in;
-    }
-    #{$t2} {
-        opacity: 1;
-        transform: scale(1.05);
-        animation-timing-function: ease-out;
-    }
-    #{$t3} {
-        opacity: 1;
-        transform: scale(1.1);
-    }
-    #{$t4} {
-        opacity: 0;
-        transform: scale(1.1);
-    }
-    #{$t5} { opacity: 0 }
-}
+    $t1: 0%;
+    $t2: round(percentage(1 / ($s*2)));
+    $t3: round(percentage(1 / $s));
+    $t4: round(percentage(1 / ($s/1.5)));
+    $t5: 100%;
 
-.cb-slideshow {
-    &,
-    &:after {
-        position: fixed;
-            top: 0px;
-            left: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-    }
-    &:after {
-        content: '';
-        background: transparent url(../img/pattern.png) repeat top left;
-    }
-
-    li {
-        span {
-            background-size: cover;
-            background-position: 50% 50%;
-            background-repeat: none;
-            color: transparent;
-            position: absolute;
+    .#{$name} {
+        &,
+        &:after {
+            position: fixed;
                 top: 0px;
                 left: 0px;
             width: 100%;
             height: 100%;
-            opacity: 0;
             z-index: 0;
-
-            animation: imageAnimation $d linear infinite 0s;
-            backface-visibility: hidden;
         }
+        &:after {
+            content: '';
+            background: transparent url(../img/pattern.png) repeat top left;
+        }
+        li {
+            span {
+                background-size: cover;
+                background-position: 50% 50%;
+                background-repeat: no-repeat;
+                color: transparent;
+                position: absolute;
+                    top: 0px;
+                    left: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                z-index: 0;
+
+                animation: #{$name}-bg ($s * 6s) linear infinite 0s;
+                backface-visibility: hidden;
+            }
+
+            @for $i from 0 to $s {
+                &:nth-child(#{$i+1}) {
+                    span {
+                        background-image: url(../img/#{$name}/#{$i+1}.jpg);
+                        @if $i > 0 {
+                            animation-delay: $i * 6s;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @keyframes #{$name}-bg {
+        #{$t1} {
+            opacity: 0;
+            animation-timing-function: ease-in;
+        }
+        #{$t2} {
+            opacity: 1;
+            transform: scale(1.05);
+            animation-timing-function: ease-out;
+        }
+        #{$t3} {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        #{$t4} {
+            opacity: 0;
+            transform: scale(1.1);
+        }
+        #{$t5} {
+            opacity: 0;
+        }
+    }
+}
+
+@mixin text-slider($slider) {
+    $name: map-get($slider, name);
+    $s:    map-get($slider, slides);
+
+
+    $t1: 0%;
+    $t2: round(percentage(1 / ($s*2)));
+    $t3: round(percentage(1 / $s));
+    $t4: $t3 + 2%;
+    $t5: round(percentage(1 / ($s/1.5)));
+    $t6: 100%;
+
+
+    li {
         div {
             opacity: 0;
             position: absolute;
@@ -79,8 +105,7 @@ $t5: 100%;
             width: 100%;
             text-align: center;
             z-index: 1000;
-
-            animation: titleAnimation $d linear infinite 0s;
+            animation: #{$name}-text ($s * 6s) linear infinite 0s;
 
             h3 {
                 color: rgba(169,3,41, 0.8);
@@ -90,72 +115,38 @@ $t5: 100%;
                 padding: 0;
             }
         }
+        @for $i from 0 to $s {
+            @if $i > 0 {
+                &:nth-child(#{$i+1}) {
+                    div {
+                        animation-delay: $i * 6s;
+                    }
+                }
+            }
+        }
+    }
 
-        &:nth-child(1) {
-            span {
-                background-image: url(../img/1.jpg)
-            }
+    @keyframes #{$name}-text {
+        #{$t1} {
+            opacity: 0;
+            transform: translateY(200px);
         }
-        &:nth-child(2) {
-            span {
-                background-image: url(../img/2.jpg);
-                animation-delay: 6s;
-            }
-            div { animation-delay: 6s; }
+        #{$t2} {
+            opacity: 1;
+            transform: translateY(0px);
         }
-        &:nth-child(3) {
-            span {
-                background-image: url(../img/3.jpg);
-                animation-delay: 12s;
-            }
-            div { animation-delay: 12s; }
+        #{$t3} {
+            opacity: 1;
+            transform: scale(1);
         }
-        &:nth-child(4) {
-            span {
-                background-image: url(../img/4.jpg);
-                animation-delay: 18s;
-            }
-            div { animation-delay: 18s; }
+        #{$t4} { opacity: 0 }
+        #{$t5} {
+            opacity: 0;
+            transform: scale(10);
         }
-        // &:nth-child(5) {
-        //     span {
-        //         background-image: url(../img/5.jpg);
-        //         animation-delay: .24s;
-        //     }
-        //     div { animation-delay: 24s; }
-        // }
-        // &:nth-child(6) {
-        //     span {
-        //         background-image: url(../img/6.jpg);
-        //         animation-delay: 30s;
-        //     }
-        //     div { animation-delay: 30s; }
-        // }
+        #{$t6} { opacity: 0 }
     }
 }
 
-
-
-/* Animation for the title */
-@keyframes titleAnimation {
-    0% {
-        opacity: 0;
-        transform: translateY(200px);
-    }
-    8% {
-        opacity: 1;
-        transform: translateY(0px);
-    }
-    17% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    19% { opacity: 0 }
-    25% {
-        opacity: 0;
-        transform: scale(10);
-    }
-    100% { opacity: 0 }
-}
-
-
+@include background-slider($slider1);
+@include text-slider($slider1);
