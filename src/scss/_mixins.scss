@@ -1,0 +1,139 @@
+@mixin background-slider($slider) {
+    $name: map-get($slider, name);
+    $s:    map-get($slider, slides);
+
+    $t1: 0%;
+    $t2: round(percentage(1 / ($s*2)));
+    $t3: round(percentage(1 / $s));
+    $t4: round(percentage(1 / ($s/1.5)));
+    $t5: 100%;
+
+    .#{$name} {
+        &,
+        &:after {
+            position: fixed;
+                top: 0px;
+                left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        &:after {
+            content: '';
+            background: transparent url(../img/pattern.png) repeat top left;
+        }
+        li {
+            span {
+                animation: #{$name}-bg ($s * 6s) linear infinite 0s;
+                backface-visibility: hidden;
+
+                background-size: cover;
+                background-position: 50% 50%;
+                background-repeat: no-repeat;
+                color: transparent;
+                opacity: 0;
+                position: absolute;
+                    top: 0px;
+                    left: 0px;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+
+                // Show at least something when animations not supported
+                .no-cssanimations & {
+                    opacity: 1;
+                }
+            }
+
+            @for $i from 0 to $s {
+                &:nth-child(#{$i+1}) {
+                    span {
+                        background-image: url(../img/#{$name}/#{$i+1}.jpg);
+                        @if $i > 0 {
+                            animation-delay: $i * 6s;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    @keyframes #{$name}-bg {
+        #{$t1} {
+            opacity: 0;
+            animation-timing-function: ease-in;
+        }
+        #{$t2} {
+            opacity: 1;
+            transform: scale(1.05);
+            animation-timing-function: ease-out;
+        }
+        #{$t3} {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        #{$t4} {
+            opacity: 0;
+            transform: scale(1.1);
+        }
+        #{$t5} {
+            opacity: 0;
+        }
+    }
+}
+
+@mixin text-slider($slider) {
+    $name: map-get($slider, name);
+    $s:    map-get($slider, slides);
+
+
+    $t1: 0%;
+    $t2: round(percentage(1 / ($s*2)));
+    $t3: round(percentage(1 / $s));
+    $t4: $t3 + 2%;
+    $t5: round(percentage(1 / ($s/1.5)));
+    $t6: 100%;
+
+
+    li {
+        div {
+            animation: #{$name}-text ($s * 6s) linear infinite 0s;
+            opacity: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        @for $i from 0 to $s {
+            @if $i > 0 {
+                &:nth-child(#{$i+1}) {
+                    div {
+                        animation-delay: $i * 6s;
+                    }
+                }
+            }
+        }
+    }
+
+    @keyframes #{$name}-text {
+        #{$t1} {
+            opacity: 0;
+            transform: translateY(200px);
+        }
+        #{$t2} {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+        #{$t3} {
+            opacity: 1;
+            transform: scale(1);
+        }
+        #{$t4} { opacity: 0 }
+        #{$t5} {
+            opacity: 0;
+            transform: scale(10);
+        }
+        #{$t6} { opacity: 0 }
+    }
+}

@@ -1,152 +1,46 @@
+@import 'mixins';
+
+
 $slider1: (
     name:   'bg-slider',
     slides: 6
 );
 
 
-@mixin background-slider($slider) {
-    $name: map-get($slider, name);
-    $s:    map-get($slider, slides);
+@include background-slider($slider1);
 
-    $t1: 0%;
-    $t2: round(percentage(1 / ($s*2)));
-    $t3: round(percentage(1 / $s));
-    $t4: round(percentage(1 / ($s/1.5)));
-    $t5: 100%;
+@include text-slider($slider1);
 
-    .#{$name} {
-        &,
-        &:after {
-            position: fixed;
-                top: 0px;
-                left: 0px;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-        &:after {
-            content: '';
-            background: transparent url(../img/pattern.png) repeat top left;
-        }
-        li {
-            span {
-                background-size: cover;
-                background-position: 50% 50%;
-                background-repeat: no-repeat;
-                color: transparent;
-                position: absolute;
-                    top: 0px;
-                    left: 0px;
-                width: 100%;
-                height: 100%;
-                opacity: 0;
-                z-index: 0;
-
-                animation: #{$name}-bg ($s * 6s) linear infinite 0s;
-                backface-visibility: hidden;
-            }
-
-            @for $i from 0 to $s {
-                &:nth-child(#{$i+1}) {
-                    span {
-                        background-image: url(../img/#{$name}/#{$i+1}.jpg);
-                        @if $i > 0 {
-                            animation-delay: $i * 6s;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @keyframes #{$name}-bg {
-        #{$t1} {
-            opacity: 0;
-            animation-timing-function: ease-in;
-        }
-        #{$t2} {
-            opacity: 1;
-            transform: scale(1.05);
-            animation-timing-function: ease-out;
-        }
-        #{$t3} {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-        #{$t4} {
-            opacity: 0;
-            transform: scale(1.1);
-        }
-        #{$t5} {
-            opacity: 0;
-        }
-    }
+body {
+    background: #000;
+    margin: 0;
 }
 
-@mixin text-slider($slider) {
-    $name: map-get($slider, name);
-    $s:    map-get($slider, slides);
-
-
-    $t1: 0%;
-    $t2: round(percentage(1 / ($s*2)));
-    $t3: round(percentage(1 / $s));
-    $t4: $t3 + 2%;
-    $t5: round(percentage(1 / ($s/1.5)));
-    $t6: 100%;
-
+.bg-slider {
+    margin: 0;
+    list-style: none;
 
     li {
         div {
-            opacity: 0;
             position: absolute;
                 bottom: 30px;
                 left: 0px;
-            width: 100%;
             text-align: center;
-            z-index: 1000;
-            animation: #{$name}-text ($s * 6s) linear infinite 0s;
 
             h3 {
-                color: rgba(169,3,41, 0.8);
+                color: rgba(255, 255, 255, .8);
                 font-family: 'BebasNeueRegular', 'Arial Narrow', Arial, sans-serif;
                 font-size: 240px;
                 line-height: 200px;
                 padding: 0;
             }
         }
-        @for $i from 0 to $s {
-            @if $i > 0 {
-                &:nth-child(#{$i+1}) {
-                    div {
-                        animation-delay: $i * 6s;
-                    }
-                }
-            }
-        }
-    }
-
-    @keyframes #{$name}-text {
-        #{$t1} {
-            opacity: 0;
-            transform: translateY(200px);
-        }
-        #{$t2} {
-            opacity: 1;
-            transform: translateY(0px);
-        }
-        #{$t3} {
-            opacity: 1;
-            transform: scale(1);
-        }
-        #{$t4} { opacity: 0 }
-        #{$t5} {
-            opacity: 0;
-            transform: scale(10);
-        }
-        #{$t6} { opacity: 0 }
     }
 }
 
-@include background-slider($slider1);
-@include text-slider($slider1);
+@media screen and (max-width: 1140px) {
+    .cb-slideshow li div h3 { font-size: 100px }
+}
+@media screen and (max-width: 600px) {
+    .cb-slideshow li div h3 { font-size: 50px }
+}
